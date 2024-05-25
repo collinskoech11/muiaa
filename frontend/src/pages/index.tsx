@@ -29,6 +29,7 @@ import {
   OrangeText,
   UnparalleledMainText,
   UnparalleledSubText,
+  ImageHere,
 } from "@/StyledComponents/HomeHero";
 import { Grid, Box, Button, styled, Typography } from "@mui/material";
 import CountUp from "react-countup";
@@ -38,20 +39,35 @@ import { useRouter } from "next/router";
 const inter = Inter({ subsets: ["latin"] });
 
 import dotenv from "dotenv";
+import { useEffect, useState } from "react";
 dotenv.config();
 
 export default function Home() {
   const Type = styled(TypeAnimation)({});
-  const ImageHere = styled("img")({
-    width: "100%",
-    borderRadius: "5%",
-    boxShadow: "0px 4px 40.6px 0px #0000001A",
-  });
+
   const router = useRouter();
   const navigate = () => {
     router.push(`https://api.muiaafeeds.com/auth0/login`);
   };
 
+  const bgImgList = ["bgIMG.png", "bgIMG2.png", "bgIMG3.png"];
+  const snapShotList = ["order.png", "trade.png", "automate.png"];
+  const [selectedImgIndex, setSelectedImgIndex] = useState(0);
+  const [opacity, setOpacity] = useState(1);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setOpacity(0.6);
+      setTimeout(() => {
+        setSelectedImgIndex((prevIndex) => (prevIndex + 1) % bgImgList.length);
+        setOpacity(1);
+      }, 500);
+    }, 3000);
+
+    return () => clearInterval(intervalId);
+  }, [bgImgList.length]);
+
+  console.log(opacity);
   return (
     <>
       <Head>
@@ -63,7 +79,10 @@ export default function Home() {
       </Head>
       <Navbar />
       <HomeMainContainer>
-        <HeroMainContainer>
+        <HeroMainContainer
+          bgImgUrl={`/assets/${bgImgList[selectedImgIndex]}`}
+          opacity={opacity}
+        >
           <BgMask>
             <ContentContainer>
               {/* <Fade direction="down"> */}
@@ -112,7 +131,7 @@ export default function Home() {
                       }}
                       onClick={() => navigate()}
                     >
-                      Make an Order
+                      Explore App
                     </BlueButton>
                   </Grid>
                   <Grid item md={6} xs={12}>
@@ -130,56 +149,22 @@ export default function Home() {
             </ContentContainer>
           </BgMask>
         </HeroMainContainer>
-
-        {/* <NavySection
-          sx={{
-            textAlign: "center",
-            display: "flex",
-            justifyContent: "center",
-            minHeight: { md: "400px", xs: "200px" },
-            alignItems: "center",
-          }}
-        >
-          <br />
-          <br />
-          <NavyTextContainer
-            sx={{
-              width: { xs: "100%", md: "70%" },
-              margin: "auto",
-              minHeight: { md: "600px", xs: "200px" },
-              display: "flex",
-            }}
-          >
-            <WhiteText
-              sx={{
-                fontSize: { md: "60px", xs: "35px" },
-                minWidth: { md: "160%", xs: "100%" },
-                margin: "auto",
-                marginLeft: { md: "-30%", xs: "0" },
-                pt: { xs: "100px", md: "0" },
-                pb: { xs: "100px", md: "0" },
-              }}
-            >
-              Uniting Kenya and Zanzibar through innovative technology
-            </WhiteText>
-          </NavyTextContainer>
-        </NavySection> */}
       </HomeMainContainer>
       <NavyStatContainer sx={{ marginTop: { xs: "-50px" } }}>
         <NavyStatGridContainer container>
-          <NavyStatItem md={4} xs={12}>
+          <NavyStatItem md={4} xs={12} noAfter={false}>
             <NavyNumber>
               <CountUp end={50} duration={10} /> +
             </NavyNumber>
             <NavyText>Dairy Farmers</NavyText>
           </NavyStatItem>
-          <NavyStatItem md={4} xs={12}>
+          <NavyStatItem md={4} xs={12} noAfter={false}>
             <NavyNumber>
               <CountUp end={266} duration={10} />
             </NavyNumber>
             <NavyText>Smart Contracts</NavyText>
           </NavyStatItem>
-          <NavyStatItem md={4} xs={12}>
+          <NavyStatItem md={4} xs={12} noAfter={true}>
             <NavyNumber>
               <CountUp end={45} duration={10} />
             </NavyNumber>
@@ -265,8 +250,9 @@ export default function Home() {
                       </UnparalleledMainText>
                       <br />
                       <UnparalleledSubText>
-                        providing feeds to agricultural farmers in Kenya and
-                        Zanzibar.
+                        A marketplace connecting farmers directly with
+                        suppliers, fostering transparency and competitive
+                        pricing.
                       </UnparalleledSubText>
                       <br />
                     </Grid>
@@ -315,13 +301,13 @@ export default function Home() {
                           margin: { xs: "auto", md: "0" },
                         }}
                       >
-                        Unparalleled access to high- quality feed products
+                        Reducing costs through optimized logistics
                       </UnparalleledMainText>
                       <br />
                       <UnparalleledSubText>
-                        Leveraging the security and transparency of blockchain
-                        for every step from supplier sourcing to end-user
-                        delivery.
+                        Cross-border payments, and streamlined documentation,
+                        MUIAA Feeds Ltd empowers farmers and distributors with
+                        cost-saving strategies.
                       </UnparalleledSubText>
                       <br />
                     </Grid>
@@ -345,7 +331,7 @@ export default function Home() {
           width: "100%",
           padding: "6%",
           margin: "auto",
-          background: "#F5F6F7",
+          background: "#f5f6f7",
         }}
       >
         <Grid md={5} xs={12}>
@@ -415,9 +401,9 @@ export default function Home() {
                     color: "#444444",
                   }}
                 >
-                  Our platform leverages smart contracts to automate and enforce
-                  agreements between stakeholders, such as contracts between
-                  farmers and suppliers, payment terms, and quality standards.
+                  Automate and enforce agreements between stakeholders, such as
+                  contracts between farmers and suppliers, payment terms, and
+                  quality standards.
                 </UnparalleledSubText>
               </Fade>
               <br />
@@ -443,7 +429,7 @@ export default function Home() {
                     width: "90%",
                   }}
                 >
-                  Tokenization
+                  Traceability
                 </SeamlessMainText>
                 <UnparalleledSubText
                   sx={{
@@ -453,10 +439,9 @@ export default function Home() {
                     color: "#444444",
                   }}
                 >
-                  Introducing our utility token specific to the platform which
-                  serves a variety of purposes.From facilitating transactions to
-                  offering incentives and rewards, our token creates an
-                  ecosystem of participation.
+                  Each batch of feed is recorded on the blockchain, allowing for
+                  real-time tracking of its origin, transportation, and quality
+                  testing results.
                 </UnparalleledSubText>
               </Fade>
               <br />
@@ -481,7 +466,7 @@ export default function Home() {
                     width: "90%",
                   }}
                 >
-                  Traceability
+                  Quality Assurance
                 </SeamlessMainText>
                 <UnparalleledSubText
                   sx={{
@@ -491,10 +476,9 @@ export default function Home() {
                     color: "#444444",
                   }}
                 >
-                  Each batch of feed is recorded on the blockchain, this
-                  provides you with real-time tracking capabilities, allowing
-                  you to trace its origin, transportation, and quality testing
-                  results.
+                  Feed quality data, including nutritional content and safety
+                  tests, are immutably stored on the blockchain. This builds
+                  trust among stakeholders
                 </UnparalleledSubText>
               </Fade>
               <br />
@@ -520,7 +504,7 @@ export default function Home() {
                     width: "90%",
                   }}
                 >
-                  Quality Assurance
+                  Tokenization
                 </SeamlessMainText>
                 <UnparalleledSubText
                   sx={{
@@ -530,10 +514,9 @@ export default function Home() {
                     color: "#444444",
                   }}
                 >
-                  We store feed quality data, including nutritional content and
-                  safety tests, immutably on the blockchain. This not only
-                  ensures the highest standards but also builds trust among all
-                  stakeholders involved in the process.
+                  Introduce a utility token specific to the platform. Tokens can
+                  be used for transactions, incentives, and rewards, creating an
+                  ecosystem of participation
                 </UnparalleledSubText>
               </Fade>
               <br />
@@ -679,16 +662,18 @@ export default function Home() {
             <Box sx={{ width: "80%", height: "50%", margin: "auto" }}>
               <Button
                 sx={{
-                  background: "#fff",
+                  background: selectedImgIndex == 0 ? "#fff" : "",
+                  color: selectedImgIndex == 0 ? "#000" : "#fff",
                   width: "100%",
-                  fontWeight: "bold",
-                  color: "#000",
+                  fontWeight: selectedImgIndex == 0 ? "bold" : "normal",
+                  transition: "all 0.3s ease-in-out",
                   padding: "10px",
                   paddingRight: "40%",
                   borderRadius: "10px",
                   textTransform: "capitalize",
                   ":hover": {
-                    background: "#ccc",
+                    background: "#ffffffc3",
+                    color: "#131212",
                   },
                 }}
               >
@@ -699,11 +684,18 @@ export default function Home() {
               <Button
                 sx={{
                   width: "100%",
-                  color: "#FFFFFF",
+                  background: selectedImgIndex == 1 ? "#fff" : "",
+                  color: selectedImgIndex == 1 ? "#000" : "#fff",
+                  fontWeight: selectedImgIndex == 1 ? "bold" : "normal",
+                  transition: "all 0.3s ease-in-out",
                   padding: "10px",
                   paddingRight: "40%",
                   borderRadius: "10px",
                   textTransform: "capitalize",
+                  ":hover": {
+                    background: "#ffffffc3",
+                    color: "#131212",
+                  },
                 }}
               >
                 Trade
@@ -713,11 +705,18 @@ export default function Home() {
               <Button
                 sx={{
                   width: "100%",
-                  color: "#FFFFFF",
+                  background: selectedImgIndex == 2 ? "#fff" : "",
+                  color: selectedImgIndex == 2 ? "#000" : "#fff",
+                  fontWeight: selectedImgIndex == 2 ? "bold" : "normal",
+                  transition: "all 0.3s ease-in-out",
                   padding: "10px",
                   paddingRight: "13%",
                   borderRadius: "10px",
                   textTransform: "capitalize",
+                  ":hover": {
+                    background: "#ffffffc3",
+                    color: "#131212",
+                  },
                 }}
               >
                 Automate with XDC
@@ -736,12 +735,21 @@ export default function Home() {
             }}
           >
             <Fade direction="up">
-              <ImageHere
-                src="assets/snapshot.svg"
+              <Box
                 sx={{
-                  marginTop: { md: "-60px", xs: "80px" },
+                  borderRadius: { xs: "0%", md: "5%" },
+                  boxShadow: { xs: "none", md: "0px 4px 40.6px 0px #0000001A" },
+                  overflowX: { xs: "none", md: "hidden" },
                 }}
-              />
+              >
+                <ImageHere
+                  animate={opacity == 1}
+                  src={`assets/${snapShotList[selectedImgIndex]}`}
+                  sx={{
+                    marginTop: { md: "-60px", xs: "80px" },
+                  }}
+                />
+              </Box>
             </Fade>
           </Grid>
           <Grid
@@ -759,48 +767,164 @@ export default function Home() {
                 "*": { lineHeight: "38px" },
               }}
             >
-              <ul>
-                <li>
-                  <UnparalleledSubText
-                    sx={{
-                      fontSize: "18px",
-                      lineHeight: "22px",
-                      width: "100%",
-                      color: "#ece0e0",
-                      textAlign: "left",
-                    }}
-                  >
-                    Browse available feed products
-                  </UnparalleledSubText>
-                </li>
-                <li>
-                  <UnparalleledSubText
-                    sx={{
-                      fontSize: "18px",
-                      lineHeight: "22px",
-                      width: "100%",
-                      color: "#ece0e0",
-                      textAlign: "left",
-                    }}
-                  >
-                    View detailed quality assurance and traceability details of
-                    each feed.
-                  </UnparalleledSubText>
-                </li>
-                <li>
-                  <UnparalleledSubText
-                    sx={{
-                      fontSize: "18px",
-                      lineHeight: "22px",
-                      width: "100%",
-                      color: "#ece0e0",
-                      textAlign: "left",
-                    }}
-                  >
-                    Place an order for the desired feed quantity.
-                  </UnparalleledSubText>
-                </li>
-              </ul>
+              {selectedImgIndex == 0 && (
+                <ul>
+                  <li>
+                    <UnparalleledSubText
+                      sx={{
+                        fontSize: "18px",
+                        lineHeight: "22px",
+                        width: "100%",
+                        color: "#ece0e0",
+                        textAlign: "left",
+                      }}
+                    >
+                      Browse available feed products
+                    </UnparalleledSubText>
+                  </li>
+                  <li>
+                    <UnparalleledSubText
+                      sx={{
+                        fontSize: "18px",
+                        lineHeight: "22px",
+                        width: "100%",
+                        color: "#ece0e0",
+                        textAlign: "left",
+                      }}
+                    >
+                      View detailed quality assurance and traceability details
+                      of each feed.
+                    </UnparalleledSubText>
+                  </li>
+                  <li>
+                    <UnparalleledSubText
+                      sx={{
+                        fontSize: "18px",
+                        lineHeight: "22px",
+                        width: "100%",
+                        color: "#ece0e0",
+                        textAlign: "left",
+                      }}
+                    >
+                      Place an order for the desired feed quantity.
+                    </UnparalleledSubText>
+                  </li>
+                </ul>
+              )}
+              {selectedImgIndex == 1 && (
+                <ul>
+                  <li>
+                    <UnparalleledSubText
+                      sx={{
+                        fontSize: "18px",
+                        lineHeight: "22px",
+                        width: "100%",
+                        color: "#ece0e0",
+                        textAlign: "left",
+                      }}
+                    >
+                      Track feed's real-time location and expected delivery
+                      date.
+                    </UnparalleledSubText>
+                  </li>
+                  <li>
+                    <UnparalleledSubText
+                      sx={{
+                        fontSize: "18px",
+                        lineHeight: "22px",
+                        width: "100%",
+                        color: "#ece0e0",
+                        textAlign: "left",
+                      }}
+                    >
+                      Access immutable quality tests and data for the ordered
+                      feed.
+                    </UnparalleledSubText>
+                  </li>
+                  <li>
+                    <UnparalleledSubText
+                      sx={{
+                        fontSize: "18px",
+                        lineHeight: "22px",
+                        width: "100%",
+                        color: "#ece0e0",
+                        textAlign: "left",
+                      }}
+                    >
+                      Receiving the Order
+                    </UnparalleledSubText>
+                  </li>
+                  <li>
+                    <UnparalleledSubText
+                      sx={{
+                        fontSize: "18px",
+                        lineHeight: "22px",
+                        width: "100%",
+                        color: "#ece0e0",
+                        textAlign: "left",
+                      }}
+                    >
+                      Confirm the receipt of the feed order.
+                    </UnparalleledSubText>
+                  </li>
+                  <li>
+                    <UnparalleledSubText
+                      sx={{
+                        fontSize: "18px",
+                        lineHeight: "22px",
+                        width: "100%",
+                        color: "#ece0e0",
+                        textAlign: "left",
+                      }}
+                    >
+                      Rate and review the feed based on quality and delivery.
+                    </UnparalleledSubText>
+                  </li>
+                </ul>
+              )}
+              {selectedImgIndex == 2 && (
+                <ul>
+                  <li>
+                    <UnparalleledSubText
+                      sx={{
+                        fontSize: "18px",
+                        lineHeight: "22px",
+                        width: "100%",
+                        color: "#ece0e0",
+                        textAlign: "left",
+                      }}
+                    >
+                      Check on XDC endpoints and
+                    </UnparalleledSubText>
+                  </li>
+                  <li>
+                    <UnparalleledSubText
+                      sx={{
+                        fontSize: "18px",
+                        lineHeight: "22px",
+                        width: "100%",
+                        color: "#ece0e0",
+                        textAlign: "left",
+                      }}
+                    >
+                      Authentication-Authorization process(Access
+                    </UnparalleledSubText>
+                  </li>
+                  <li>
+                    <UnparalleledSubText
+                      sx={{
+                        fontSize: "18px",
+                        lineHeight: "22px",
+                        width: "100%",
+                        color: "#ece0e0",
+                        textAlign: "left",
+                      }}
+                    >
+                      Certificates) to determine platform capabilities.
+                    </UnparalleledSubText>
+                  </li>
+                </ul>
+              )}
             </Box>
           </Grid>
         </Grid>
@@ -829,12 +953,27 @@ export default function Home() {
             width: "100%",
             maxWidth: "700px",
             margin: "auto",
-            marginTop: { md: "100PX", xs: "0" },
+            marginTop: { md: "130px", xs: "0" },
             marginBottom: "25px",
           }}
         >
           Powered by blockchain
         </SeamlessMainText>
+        <UnparalleledSubText
+          sx={{
+            fontSize: { md: "18px", xl: "24px" },
+            lineHeight: { xs: "35px", md: "44px" },
+            color: "#1A1A1A",
+            textAlign: "center",
+            width: { xs: "96%", md: "60%" },
+            margin: "auto",
+            fontWeight: "300",
+          }}
+        >
+          Blockchain technology is a decentralized, digital ledger that securely
+          records transactions and data across multiple parties, enhancing
+          immutability, transparency, traceability, and efficiency.
+        </UnparalleledSubText>
         <br />
         <Grid
           container
@@ -843,6 +982,7 @@ export default function Home() {
             width: "100%",
             maxWidth: "1350px",
             margin: "auto",
+            marginTop: "50px",
             img: { width: "50px", height: "50px", marginBottom: "10px" },
           }}
         >
@@ -890,9 +1030,9 @@ export default function Home() {
                       lineHeight: "22.5px",
                     }}
                   >
-                    Automate and enforce agreements between stakeholders, such
-                    as contracts between farmers and suppliers, payment terms,
-                    and quality standards.
+                    Check on XDC endpoints and Authentication-Authorization
+                    process(Access Certificates) to determine platform
+                    capabilities.
                   </UnparalleledSubText>
                 </Box>
               </Fade>
@@ -1044,9 +1184,9 @@ export default function Home() {
                       textAlign: "left",
                     }}
                   >
-                    Automate and enforce agreements between stakeholders, such
-                    as contracts between farmers and suppliers, payment terms,
-                    and quality standards.
+                    To offer users real-time updates on the status and location
+                    of their feed orders using blockchain's decentralised
+                    ledger.
                   </UnparalleledSubText>
                 </Box>
               </Fade>
@@ -1080,9 +1220,10 @@ export default function Home() {
                     textAlign: "left",
                     fontWeight: "500",
                     lineHeight: "29.05px",
+                    width: "100%",
                   }}
                 >
-                  Real-time Feed Tracking via Blockchain
+                  Smart Contracts for Automated Agreements(ESCROW Contract)
                 </UnparalleledMainText>
                 <br />
                 <UnparalleledSubText
@@ -1095,9 +1236,8 @@ export default function Home() {
                     textAlign: "left",
                   }}
                 >
-                  To automate agreements between stakeholders like contracts
-                  between farmers and suppliers, payment terms, and quality
-                  standards.
+                  To automate payments between farmers and suppliers upon
+                  fulfillment of specific conditions.
                 </UnparalleledSubText>
               </Box>
             </Fade>
